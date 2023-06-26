@@ -1,4 +1,4 @@
-##bootstrap 4000
+## 4000 times
 set.seed(2402) # Setting the seed for replication purposes
 
 n <- 24 # Sample size (male control)
@@ -69,7 +69,7 @@ for(i in 1 : ncol(dmpTableSz_male.resampling4000)) {
 	PermP.male.resampling.num4000[i,3] <- sum(as.numeric(dmpTableSz_male.resampling4000[,i]<1e-05))
 }
 
-colnames(PermP.male.resampling.num4000)=c("num.adjP","num.4e","num.5e")
+colnames(PermP.male.resampling.num4000)=c("num.nominal","num.4e","num.5e")
 rownames(PermP.male.resampling.num4000)=paste("subsampled", 1:4000, sep = "")
 
 #
