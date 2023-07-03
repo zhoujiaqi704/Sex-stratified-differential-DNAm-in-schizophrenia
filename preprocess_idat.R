@@ -32,7 +32,7 @@ d<-autoplot(prcomp(t(Combat2_batch)), data = myLoad$pd, colour ='Sample_Group',s
 plot(d)
 dev.off()
 
-###cell type composion estimate
+###cell type composion estimate (modified from champ.refbase)
 source("./refbase.R")
 cell<-DLPFC.refbase(beta=Combat2_Batch,
 	                arraytype="450K")
@@ -43,7 +43,7 @@ library(sva)
 mod1 = model.matrix(~Sample_Group+sex+age_years+race+cellTypes$,data=myLoad$pd) #All cell proportion influence except the one with least cell proportion get corrected
 mod0<-mod1[,-c(2,3)]
 n.sv<-num.sv(Combat2_Batch, mod1, method = "be", vfilter = NULL, B = 20,seed = NULL)
-sva_14 = svaseq(Combat2_Batch,mod1,mod0, n.sv =14 )$sv
+sva_14 = sva(Combat2_Batch,mod1,mod0, n.sv =14 )$sv
 
 colnames(sva_14)<-paste("sv", 1:14, sep = "")
 pd<-cbind(myLoad$pd,sva_14)
@@ -53,7 +53,7 @@ source("./pvca.R")
 pvca(Combat2_Batch,pd)
 
 #regression
-design = model.matrix(~Sample_Group+sex+age_years+race+cellTypes+sv, data=pd)#desigh matrix for ref-based
+design = model.matrix(~Sample_Group+sex+age_years+race+cellTypes$+sv$, data=pd)#desigh matrix for ref-based
 Y<-Combat2_Batch
 X<-as.matrix(design)
 beta = (solve(t(X)%*%X)%*%t(X))%*%t(Y)
